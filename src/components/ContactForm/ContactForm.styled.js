@@ -12,7 +12,9 @@ export const Form = styled.form`
 `;
 
 export const Button = styled.button`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 16px;
 
   background-color: transparent;
@@ -46,4 +48,12 @@ export const Button = styled.button`
 
 export const FormLabel = styled.p`
   margin-bottom: 4px;
+`;
+
+export const FormSpin = styled.div`
+  margin-right: 4px;
+
+  justify-content: center;
+  display: flex;
+  align-items: center;
 `;

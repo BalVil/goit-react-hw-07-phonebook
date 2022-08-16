@@ -1,5 +1,4 @@
-import { useDispatch } from 'react-redux';
-import { delContact } from 'redux/contactsSlice';
+import { useDeleteContactMutation } from 'redux/contactsSlice';
 import PropTypes from 'prop-types';
 import {
   Contact,
@@ -7,15 +6,22 @@ import {
   ContactNumber,
   DelButton,
 } from './ContactItem.styled';
+import { Spinner } from 'components/Spinner/Spinner';
 
-export const ContactItem = ({ id, name, number }) => {
-  const dispatch = useDispatch();
+export const ContactItem = ({ id, name, phone }) => {
+  const [deleteContact, { data, isLoading: isDeleting }] =
+    useDeleteContactMutation();
 
   return (
     <Contact>
       <ContactName>{name}:</ContactName>
-      <ContactNumber>{number}</ContactNumber>
-      <DelButton type="button" onClick={() => dispatch(delContact(id))}>
+      <ContactNumber>{phone}</ContactNumber>
+      <DelButton
+        type="button"
+        onClick={() => deleteContact(id)}
+        disabled={data || isDeleting}
+      >
+        {isDeleting && <Spinner size={18} />}
         Delete
       </DelButton>
     </Contact>
@@ -25,5 +31,5 @@ export const ContactItem = ({ id, name, number }) => {
 ContactItem.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired,
 };

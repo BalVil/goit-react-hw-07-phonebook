@@ -1,26 +1,48 @@
 import { ContactItem } from 'components/ContactItem/ContactItem';
 import { useContactList } from 'hooks/useContactList';
+import { Spinner } from 'components/Spinner/Spinner';
+import { SpinWrap } from './ContactList.styled';
+import { Notification } from 'components/Notification/Notification';
 
 const ContactList = () => {
-  const { visibleContacts } = useContactList();
+  const {
+    data: contacts,
+    visibleContacts,
+    isLoading,
+    error,
+  } = useContactList();
 
   return (
-    <ul>
-      {visibleContacts.length > 0 ? (
-        visibleContacts.map(({ id, name, number }) => {
-          return (
-            <ContactItem
-              key={id}
-              name={name}
-              number={number}
-              id={id}
-            ></ContactItem>
-          );
-        })
-      ) : (
-        <div>No contacts in the phonebook</div>
+    <>
+      {isLoading && (
+        <SpinWrap>
+          <Spinner />
+        </SpinWrap>
       )}
-    </ul>
+      {contacts && (
+        <ul>
+          {visibleContacts.length > 0 ? (
+            visibleContacts.map(({ id, name, phone }) => {
+              return (
+                <ContactItem
+                  key={id}
+                  name={name}
+                  phone={phone}
+                  id={id}
+                ></ContactItem>
+              );
+            })
+          ) : (
+            <Notification status="info">
+              No contacts in the phonebook
+            </Notification>
+          )}
+        </ul>
+      )}
+      {error && (
+        <Notification status="error">Something went wrong.</Notification>
+      )}
+    </>
   );
 };
 
