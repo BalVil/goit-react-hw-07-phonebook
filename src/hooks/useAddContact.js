@@ -6,8 +6,7 @@ import {
 } from 'redux/contactsSlice';
 
 export const useAddContact = () => {
-  const [addContact, { isSuccess, isError, isLoading: isAdding, error }] =
-    useAddContactMutation();
+  const [addContact, { isLoading: isAdding, error }] = useAddContactMutation();
   const { data: contacts } = useGetContactsQuery();
 
   // чи можливо без useState та handleChange?
