@@ -9,7 +9,7 @@ import {
 import { Spinner } from 'components/Spinner/Spinner';
 
 export const ContactItem = ({ id, name, phone }) => {
-  const [deleteContact, { data, isLoading: isDeleting }] =
+  const [deleteContact, { data: isData, isLoading: isDeleting }] =
     useDeleteContactMutation();
 
   return (
@@ -19,7 +19,7 @@ export const ContactItem = ({ id, name, phone }) => {
       <DelButton
         type="button"
         onClick={() => deleteContact(id)}
-        disabled={data || isDeleting}
+        disabled={isData || isDeleting}
       >
         {isDeleting && <Spinner size={18} />}
         Delete

@@ -1,7 +1,6 @@
 import { ContactItem } from 'components/ContactItem/ContactItem';
 import { useContactList } from 'hooks/useContactList';
 import { Spinner } from 'components/Spinner/Spinner';
-import { SpinWrap } from './ContactList.styled';
 import { Notification } from 'components/Notification/Notification';
 
 const ContactList = () => {
@@ -14,11 +13,7 @@ const ContactList = () => {
 
   return (
     <>
-      {isLoading && (
-        <SpinWrap>
-          <Spinner />
-        </SpinWrap>
-      )}
+      {isLoading && <Spinner primary />}
       {contacts && (
         <ul>
           {visibleContacts.length > 0 ? (
@@ -40,7 +35,7 @@ const ContactList = () => {
         </ul>
       )}
       {error && (
-        <Notification status="error">Something went wrong.</Notification>
+        <Notification status="error">Something went wrong</Notification>
       )}
     </>
   );

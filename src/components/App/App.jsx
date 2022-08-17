@@ -19,7 +19,7 @@ export const App = () => {
         <Filter />
         <ContactList />
       </Section>
-      <ToastContainer autoClose={3000} transition={Slide} />
+      <ToastContainer autoClose={2000} transition={Slide} />
       <GlobalStyle />
     </Container>
   );

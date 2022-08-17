@@ -1,68 +1,11 @@
-// import { useAddContact } from 'hooks/useAddContact';
-import { Form, Button, FormLabel, FormSpin } from './ContactForm.styled';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-// import { addContact } from 'redux/contactsSlice';
-import {
-  useAddContactMutation,
-  useGetContactsQuery,
-} from 'redux/contactsSlice';
+import { useAddContact } from 'hooks/useAddContact';
+import { Form, Button, FormLabel } from './ContactForm.styled';
 import { Spinner } from 'components/Spinner/Spinner';
 import { Notification } from 'components/Notification/Notification';
 
 const ContactForm = () => {
-  // const { name, number, handleChange, handleSubmit } = useAddContact();
-  const [addContact, { isSuccess, isError, isLoading: isAdding, error }] =
-    useAddContactMutation();
-  const { data: contacts } = useGetContactsQuery();
-
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-
-  const handleChange = e => {
-    const { name, value } = e.target;
-
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-
-      case 'phone':
-        setPhone(value);
-        break;
-
-      default:
-        return;
-    }
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    const sameName =
-      contacts.findIndex(
-        item => item.name.toLowerCase() === name.toLowerCase()
-      ) !== -1;
-
-    if (sameName) {
-      toast.warn(`${name} is already in contacts `);
-      return;
-    }
-
-    const newContact = {
-      name,
-      phone,
-    };
-
-    addContact(newContact);
-
-    resetForm();
-  };
-
-  const resetForm = () => {
-    setName('');
-    setPhone('');
-  };
+  const { name, phone, handleChange, handleSubmit, isAdding, error } =
+    useAddContact();
 
   return (
     <>
@@ -94,11 +37,7 @@ const ContactForm = () => {
           />
         </label>
         <Button type="submit" disabled={isAdding}>
-          {isAdding && (
-            <FormSpin>
-              <Spinner size={18} />
-            </FormSpin>
-          )}
+          {isAdding && <Spinner size={18} />}
           Add contact
         </Button>
       </Form>

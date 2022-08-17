@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { nanoid } from 'nanoid';
-import { addContact } from 'redux/contactsSlice';
-import { getItems } from 'redux/selectors';
+import {
+  useAddContactMutation,
+  useGetContactsQuery,
+} from 'redux/contactsSlice';
 
 export const useAddContact = () => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [addContact, { isSuccess, isError, isLoading: isAdding, error }] =
+    useAddContactMutation();
+  const { data: contacts } = useGetContactsQuery();
 
-  const contactsItems = useSelector(getItems);
-  const dispatch = useDispatch();
+  // чи можливо без useState та handleChange?
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -20,8 +22,8 @@ export const useAddContact = () => {
         setName(value);
         break;
 
-      case 'number':
-        setNumber(value);
+      case 'phone':
+        setPhone(value);
         break;
 
       default:
@@ -29,35 +31,34 @@ export const useAddContact = () => {
     }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     const sameName =
-      contactsItems.findIndex(
+      contacts.findIndex(
         item => item.name.toLowerCase() === name.toLowerCase()
       ) !== -1;
 
     if (sameName) {
       toast.warn(`${name} is already in contacts `);
-      // resetForm();
       return;
     }
 
-    const newContact = {
-      id: nanoid(),
-      name,
-      number,
-    };
-
-    dispatch(addContact(newContact));
-
-    resetForm();
+    // чи треба перевіряти на isSuccess та isError?
+    try {
+      await addContact({ name, phone });
+      toast.success('Contact added');
+      resetForm();
+    } catch (error) {
+      toast.error('An error occurred when adding a contact');
+      console.log(error);
+    }
   };
 
   const resetForm = () => {
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
-  return { name, number, handleChange, handleSubmit };
+  return { name, phone, handleChange, handleSubmit, isAdding, error };
 };
