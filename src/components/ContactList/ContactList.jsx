@@ -35,7 +35,7 @@ const ContactList = () => {
         </ul>
       )}
       {error && (
-        <Notification status="error">Something went wrong</Notification>
+        <Notification status="error">Something went wrong.</Notification>
       )}
     </>
   );

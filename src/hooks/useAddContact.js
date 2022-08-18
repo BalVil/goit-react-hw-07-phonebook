@@ -1,17 +1,20 @@
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
 import {
   useAddContactMutation,
   useGetContactsQuery,
 } from 'redux/contactsSlice';
+import {
+  showSuccess,
+  showError,
+  showWarning,
+} from 'components/Notification/Notification';
 
 export const useAddContact = () => {
-  const [addContact, { isLoading: isAdding, error }] = useAddContactMutation();
-  const { data: contacts } = useGetContactsQuery();
-
-  // чи можливо без useState та handleChange?
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [addContact, { isSuccess, isError, isLoading: isAdding, error }] =
+    useAddContactMutation();
+  const { data: contacts } = useGetContactsQuery();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -39,20 +42,32 @@ export const useAddContact = () => {
       ) !== -1;
 
     if (sameName) {
-      toast.warn(`${name} is already in contacts `);
+      showWarning(`${name} is already in contacts `);
       return;
     }
 
-    // чи треба перевіряти на isSuccess та isError?
-    try {
-      await addContact({ name, phone });
-      toast.success('Contact added');
-      resetForm();
-    } catch (error) {
-      toast.error('An error occurred when adding a contact');
-      console.log(error);
-    }
+    addContact({ name, phone });
+
+    // alternative to useEffect:
+    // try {
+    //   await addContact({ name, phone });
+    //   toast.success('Contact added');
+    //   resetForm();
+    // } catch (error) {
+    //   toast.error('An error occurred when adding a contact');
+    //   console.log(error);
+    // }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      showSuccess('Contact added');
+      resetForm();
+    }
+    if (isError) {
+      showError('An error occurred when adding a contact');
+    }
+  }, [isError, isSuccess]);
 
   const resetForm = () => {
     setName('');
