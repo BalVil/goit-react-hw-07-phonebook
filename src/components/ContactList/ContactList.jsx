@@ -13,7 +13,7 @@ const ContactList = () => {
 
   return (
     <>
-      {isLoading && <Spinner primary />}
+      {isLoading && <Spinner />}
       {contacts && (
         <ul>
           {visibleContacts.length > 0 ? (
