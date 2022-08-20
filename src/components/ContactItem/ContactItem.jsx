@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDeleteContactMutation } from 'redux/contactsSlice';
 import PropTypes from 'prop-types';
-import { showSuccess, showError } from 'components/Notification/Notification';
+import { showWarning, showError } from 'components/Notification/Notification';
 import {
   Contact,
   ContactName,
@@ -18,12 +18,12 @@ export const ContactItem = ({ id, name, phone }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      showSuccess('Contact added');
+      showWarning(`Contact ${name} deleted`);
     }
     if (isError) {
-      showError('An error occurred when adding a contact');
+      showError('An error occurred when deleting a contact');
     }
-  }, [isError, isSuccess]);
+  }, [isError, isSuccess, name]);
 
   return (
     <Contact>
