@@ -6,7 +6,7 @@ import { Notification } from 'components/Notification/Notification';
 const ContactList = () => {
   const {
     data: contacts,
-    visibleContacts,
+    FilteredContacts,
     isLoading,
     error,
   } = useContactList();
@@ -16,8 +16,8 @@ const ContactList = () => {
       {isLoading && <Spinner />}
       {contacts && (
         <ul>
-          {visibleContacts.length > 0 ? (
-            visibleContacts.map(({ id, name, phone }) => {
+          {FilteredContacts.length > 0 ? (
+            FilteredContacts.map(({ id, name, phone }) => {
               return (
                 <ContactItem
                   key={id}

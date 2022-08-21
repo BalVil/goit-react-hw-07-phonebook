@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetContactsQuery } from 'redux/contactsSlice';
 
@@ -6,15 +7,15 @@ export const useContactList = () => {
 
   const filter = useSelector(state => state.filter.value);
 
-  const getFilteredContacts = () => {
+  const FilteredContacts = useMemo(() => {
     const normalizedFilter = filter.toLowerCase().trim();
 
-    return data?.filter(({ name }) =>
-      name.toLowerCase().includes(normalizedFilter)
+    return (
+      data?.filter(({ name }) =>
+        name.toLowerCase().includes(normalizedFilter)
+      ) ?? []
     );
-  };
+  }, [data, filter]);
 
-  const visibleContacts = getFilteredContacts();
-
-  return { data, visibleContacts, isLoading, error };
+  return { data, FilteredContacts, isLoading, error };
 };
